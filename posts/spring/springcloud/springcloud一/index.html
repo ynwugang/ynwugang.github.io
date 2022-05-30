@@ -1,0 +1,602 @@
+<!doctype html>
+<html lang="en-us">
+  <head>
+    <title>SpringCloud(一) // 个人博客</title>
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <meta charset="utf-8" />
+    <meta name="generator" content="Hugo 0.98.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="John Doe" />
+    <meta name="description" content="" />
+    <link rel="stylesheet" href="https://ynwugang.github.io/css/main.min.88e7083eff65effb7485b6e6f38d10afbec25093a6fac42d734ce9024d3defbd.css" />
+
+    
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="SpringCloud(一)"/>
+<meta name="twitter:description" content="1、常见面试题 1.1、生么是微服务？ 1.2、微服务之间是如何独立通讯的？ 1.3、SpringCloud和Dubbo有哪些区别？ 1.4、Springboot和SpringClound，请你谈谈对他们的理解 1.5、什么是服务熔断？什么是服务降级？ 1.6、微服务的优缺点分别是什么？说下你在项目开发中遇到的坑 1.7、你所知道的微服务技术栈有哪些？请列举一二 1.8、eureka和zookeeper都可以提供服务注册与发现的功能，请说说两个的区别？
+2、微服务概述 2.1、什么是微服务 **什么是微服务？**微服务（Microservice Architecture）是近几年流行的一种架构思想，关于它的概念很难一言以蔽之。 究竟什么是微服务呢？我们在此引用ThoughtWork公司的首席科学家Martin Fowler于2014年提出的一段话： 原文：https://martinfowler.com/articles/microservices.html 汉化：https://www.cnblogs.com/liuning8023/p/4493156.html
+  就目前而言，对于微服务，业界并没有一个统一的，标准的定义
+  但通常而言，微服务架构是一种架构模式，或者说是一种架构风格，它提倡将单一的应用程序划分成一组小的服务，每个服务运行在其独立的自己的进程内，服务之间互相协调，互相配合，为用户提供最终价值。服务之间采用轻量级的通信机制互相沟通，每个服务都围绕着具体的业务进行构建，并且能够被独立的部署到生成环境中。另外，应尽量避免统一的、集中式的服务管理机制，对具体的一个服务而言，应根据业务上下文，选择合适的语言、工具进行构建，可以有一个非常轻量级的集中式管理来协调这些服务，可以使用不同的语言来编写服务，也可以使用不同的数据存储；
+  官方的话太过生涩，我们从技术维度来理解下：
+ 微服务化的核心就是将传统的一站式应用，根据业务拆分成一个一个的服务，彻底地去耦合，每一个微服务提供单个业务功能的服务，一个服务做一件事请，从技术角度看就是一种小而独立的处理过程，类似进程的概念，能够自行单独启动或销毁，拥有自己独立的数据库。  2.2、微服务与微服务架构 微服务 强调的是服务的大小，他关注的是某一个点，是具体解决某一个问题/提供落地对应服务的一个服务应用，狭义的看，可以看做是IDEA中的一个个微服务工程，或者Moudle
+1.IDEA工具里面使用Maven开发的一个个独立的小Moudle，它具体是使用SpringBoot开发的一个小模块，专业的事情交给专业的模块来做，一个模块就做这一件事情 2.强调的是一个个的个体，每个个体完成一个具体的任务或者功能！ 微服务架构 一种新的架构形式，Martin Fowler，2014提出
+微服务架构是一种架构模式，它提倡将单一应用程序划分成一组小的服务，服务之间互相协调，互相配合，为用户提供最终价值。每个服务运行在其独立的进程中，服务与服务间采用轻量级的通信机制互相协作，每个服务都围绕着具体的业务进行构建，并且能够被独立的部署到生成环境中，另外，应尽量避免统一的、集中式的服务管理机制，对具体的一个服务而言，应根据业务上下文，选择合适的语言、工具对其进行构建。
+2.3、微服务优缺点 优点：
+  每个服务足够内聚，足够小，代码容易理解，这样能聚焦一个指定的业务功能或者业务需求；
+  开发简单，开发效率提高，一个服务可能就是专一的只干一件事；
+  微服务能够被小团队单独开发，这个小团队是2-5人的开发人员组成；
+  微服务是松耦合的，是有功能意义的服务，无论是在开发阶段或部署阶段都是独立的。
+  微服务能使用不同的语言开发；
+  易于和第三方集成，微服务允许容易且灵活的方式集成自动部署，通过持续集成工具，如Jenkins、Hudson、Bamboo；
+  微服务易于被开发人员理解、修改和维护，这样小团队能够更关注自己的工作成果。无需通过合作才能体现价值；
+  微服务允许你利用、融合最新技术；
+  微服务只是业务逻辑的代码，不会和HTML、CSS或其他界面混合；
+  每个微服务都有自己的存储能力，可以有自己的数据库，也可以有统一数据库；"/>
+
+    <meta property="og:title" content="SpringCloud(一)" />
+<meta property="og:description" content="1、常见面试题 1.1、生么是微服务？ 1.2、微服务之间是如何独立通讯的？ 1.3、SpringCloud和Dubbo有哪些区别？ 1.4、Springboot和SpringClound，请你谈谈对他们的理解 1.5、什么是服务熔断？什么是服务降级？ 1.6、微服务的优缺点分别是什么？说下你在项目开发中遇到的坑 1.7、你所知道的微服务技术栈有哪些？请列举一二 1.8、eureka和zookeeper都可以提供服务注册与发现的功能，请说说两个的区别？
+2、微服务概述 2.1、什么是微服务 **什么是微服务？**微服务（Microservice Architecture）是近几年流行的一种架构思想，关于它的概念很难一言以蔽之。 究竟什么是微服务呢？我们在此引用ThoughtWork公司的首席科学家Martin Fowler于2014年提出的一段话： 原文：https://martinfowler.com/articles/microservices.html 汉化：https://www.cnblogs.com/liuning8023/p/4493156.html
+  就目前而言，对于微服务，业界并没有一个统一的，标准的定义
+  但通常而言，微服务架构是一种架构模式，或者说是一种架构风格，它提倡将单一的应用程序划分成一组小的服务，每个服务运行在其独立的自己的进程内，服务之间互相协调，互相配合，为用户提供最终价值。服务之间采用轻量级的通信机制互相沟通，每个服务都围绕着具体的业务进行构建，并且能够被独立的部署到生成环境中。另外，应尽量避免统一的、集中式的服务管理机制，对具体的一个服务而言，应根据业务上下文，选择合适的语言、工具进行构建，可以有一个非常轻量级的集中式管理来协调这些服务，可以使用不同的语言来编写服务，也可以使用不同的数据存储；
+  官方的话太过生涩，我们从技术维度来理解下：
+ 微服务化的核心就是将传统的一站式应用，根据业务拆分成一个一个的服务，彻底地去耦合，每一个微服务提供单个业务功能的服务，一个服务做一件事请，从技术角度看就是一种小而独立的处理过程，类似进程的概念，能够自行单独启动或销毁，拥有自己独立的数据库。  2.2、微服务与微服务架构 微服务 强调的是服务的大小，他关注的是某一个点，是具体解决某一个问题/提供落地对应服务的一个服务应用，狭义的看，可以看做是IDEA中的一个个微服务工程，或者Moudle
+1.IDEA工具里面使用Maven开发的一个个独立的小Moudle，它具体是使用SpringBoot开发的一个小模块，专业的事情交给专业的模块来做，一个模块就做这一件事情 2.强调的是一个个的个体，每个个体完成一个具体的任务或者功能！ 微服务架构 一种新的架构形式，Martin Fowler，2014提出
+微服务架构是一种架构模式，它提倡将单一应用程序划分成一组小的服务，服务之间互相协调，互相配合，为用户提供最终价值。每个服务运行在其独立的进程中，服务与服务间采用轻量级的通信机制互相协作，每个服务都围绕着具体的业务进行构建，并且能够被独立的部署到生成环境中，另外，应尽量避免统一的、集中式的服务管理机制，对具体的一个服务而言，应根据业务上下文，选择合适的语言、工具对其进行构建。
+2.3、微服务优缺点 优点：
+  每个服务足够内聚，足够小，代码容易理解，这样能聚焦一个指定的业务功能或者业务需求；
+  开发简单，开发效率提高，一个服务可能就是专一的只干一件事；
+  微服务能够被小团队单独开发，这个小团队是2-5人的开发人员组成；
+  微服务是松耦合的，是有功能意义的服务，无论是在开发阶段或部署阶段都是独立的。
+  微服务能使用不同的语言开发；
+  易于和第三方集成，微服务允许容易且灵活的方式集成自动部署，通过持续集成工具，如Jenkins、Hudson、Bamboo；
+  微服务易于被开发人员理解、修改和维护，这样小团队能够更关注自己的工作成果。无需通过合作才能体现价值；
+  微服务允许你利用、融合最新技术；
+  微服务只是业务逻辑的代码，不会和HTML、CSS或其他界面混合；
+  每个微服务都有自己的存储能力，可以有自己的数据库，也可以有统一数据库；" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ynwugang.github.io/posts/spring/springcloud/springcloud%E4%B8%80/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-05-24T12:58:24+08:00" />
+<meta property="article:modified_time" content="2022-05-24T12:58:24+08:00" />
+
+
+
+  </head>
+  <body>
+    <header class="app-header">
+      <a href="https://ynwugang.github.io/"><img class="app-header-avatar" src="/avatar.jpg" alt="John Doe" /></a>
+      <h1>个人博客</h1>
+      <nav class="app-header-menu">
+          <a class="app-header-menu-item" href="/">Home</a>
+             - 
+          
+          <a class="app-header-menu-item" href="/tags/">Tags</a>
+             - 
+          
+          <a class="app-header-menu-item" href="/about/">About</a>
+      </nav>
+      <p>个人学习使用</p>
+      <div class="app-header-social">
+        
+          <a href="https://github.com/gohugoio" target="_blank" rel="noreferrer noopener">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-github">
+  <title>Github</title>
+  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+</svg>
+          </a>
+        
+          <a href="https://twitter.com/gohugoio" target="_blank" rel="noreferrer noopener">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-twitter">
+  <title>Twitter</title>
+  <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path>
+</svg>
+          </a>
+        
+      </div>
+    </header>
+    <main class="app-container">
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class ="post-title">SpringCloud(一)</h1>
+      <div class="post-meta">
+        <div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-calendar">
+  <title>calendar</title>
+  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line>
+</svg>
+          May 24, 2022
+        </div>
+        <div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-clock">
+  <title>clock</title>
+  <circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>
+</svg>
+          2 min read
+        </div>
+        <div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tag">
+  <title>tag</title>
+  <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line>
+</svg>
+              <a class="tag" href="https://ynwugang.github.io/tags/springcloud/">SpringCloud</a>
+        </div>
+      </div>
+    </header>
+    <div class="post-content">
+      <h2 id="1常见面试题">1、常见面试题</h2>
+<p>1.1、生么是微服务？
+1.2、微服务之间是如何独立通讯的？
+1.3、SpringCloud和Dubbo有哪些区别？
+1.4、Springboot和SpringClound，请你谈谈对他们的理解
+1.5、什么是服务熔断？什么是服务降级？
+1.6、微服务的优缺点分别是什么？说下你在项目开发中遇到的坑
+1.7、你所知道的微服务技术栈有哪些？请列举一二
+1.8、eureka和zookeeper都可以提供服务注册与发现的功能，请说说两个的区别？</p>
+<h2 id="2微服务概述">2、微服务概述</h2>
+<h3 id="21什么是微服务">2.1、什么是微服务</h3>
+<p>**什么是微服务？**微服务（Microservice Architecture）是近几年流行的一种架构思想，关于它的概念很难一言以蔽之。
+究竟什么是微服务呢？我们在此引用ThoughtWork公司的首席科学家Martin Fowler于2014年提出的一段话：
+原文：<a href="https://martinfowler.com/articles/microservices.html">https://martinfowler.com/articles/microservices.html</a>
+汉化：<a href="https://www.cnblogs.com/liuning8023/p/4493156.html">https://www.cnblogs.com/liuning8023/p/4493156.html</a></p>
+<ul>
+<li>
+<p>就目前而言，对于微服务，业界并没有一个统一的，标准的定义</p>
+</li>
+<li>
+<p>但通常而言，微服务架构是一种架构模式，或者说是一种架构风格，<strong>它提倡将单一的应用程序划分成一组小的服务</strong>，每个服务运行在其独立的自己的进程内，服务之间互相协调，互相配合，为用户提供最终价值。服务之间采用轻量级的通信机制互相沟通，每个服务都围绕着具体的业务进行构建，并且能够被独立的部署到生成环境中。另外，应尽量避免统一的、集中式的服务管理机制，对具体的一个服务而言，应根据业务上下文，选择合适的语言、工具进行构建，可以有一个非常轻量级的集中式管理来协调这些服务，可以使用不同的语言来编写服务，也可以使用不同的数据存储；</p>
+</li>
+</ul>
+<p>官方的话太过生涩，我们从技术维度来理解下：</p>
+<ul>
+<li>微服务化的核心就是将传统的一站式应用，根据业务拆分成一个一个的服务，彻底地去耦合，每一个微服务提供单个业务功能的服务，一个服务做一件事请，从技术角度看就是一种小而独立的处理过程，类似进程的概念，能够自行单独启动或销毁，拥有自己独立的数据库。</li>
+</ul>
+<h3 id="22微服务与微服务架构">2.2、微服务与微服务架构</h3>
+<p><strong>微服务</strong>
+强调的是服务的大小，他关注的是某一个点，是具体解决某一个问题/提供落地对应服务的一个服务应用，狭义的看，可以看做是IDEA中的一个个微服务工程，或者Moudle</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span>1.IDEA工具里面使用Maven开发的一个个独立的小Moudle，它具体是使用SpringBoot开发的一个小模块，专业的事情交给专业的模块来做，一个模块就做这一件事情
+</span></span><span style="display:flex;"><span>2.强调的是一个个的个体，每个个体完成一个具体的任务或者功能！
+</span></span></code></pre></div><p><strong>微服务架构</strong>
+一种新的架构形式，Martin Fowler，2014提出</p>
+<p>微服务架构是一种架构模式，它提倡将单一应用程序划分成一组小的服务，服务之间互相协调，互相配合，为用户提供最终价值。每个服务运行在其独立的进程中，服务与服务间采用轻量级的通信机制互相协作，每个服务都围绕着具体的业务进行构建，并且能够被独立的部署到生成环境中，另外，应尽量避免统一的、集中式的服务管理机制，对具体的一个服务而言，应根据业务上下文，选择合适的语言、工具对其进行构建。</p>
+<h3 id="23微服务优缺点">2.3、微服务优缺点</h3>
+<p><strong>优点：</strong></p>
+<ul>
+<li>
+<p>每个服务足够内聚，足够小，代码容易理解，这样能聚焦一个指定的业务功能或者业务需求；</p>
+</li>
+<li>
+<p>开发简单，开发效率提高，一个服务可能就是专一的只干一件事；</p>
+</li>
+<li>
+<p>微服务能够被小团队单独开发，这个小团队是2-5人的开发人员组成；</p>
+</li>
+<li>
+<p>微服务是松耦合的，是有功能意义的服务，无论是在开发阶段或部署阶段都是独立的。</p>
+</li>
+<li>
+<p>微服务能使用不同的语言开发；</p>
+</li>
+<li>
+<p>易于和第三方集成，微服务允许容易且灵活的方式集成自动部署，通过持续集成工具，如Jenkins、Hudson、Bamboo；</p>
+</li>
+<li>
+<p>微服务易于被开发人员理解、修改和维护，这样小团队能够更关注自己的工作成果。无需通过合作才能体现价值；</p>
+</li>
+<li>
+<p>微服务允许你利用、融合最新技术；</p>
+</li>
+<li>
+<p><strong>微服务只是业务逻辑的代码，不会和HTML、CSS或其他界面混合；</strong></p>
+</li>
+<li>
+<p><strong>每个微服务都有自己的存储能力，可以有自己的数据库，也可以有统一数据库；</strong></p>
+</li>
+</ul>
+<p><strong>缺点：</strong></p>
+<ul>
+<li>
+<p>开发人员要处理分布式系统的复杂性；</p>
+</li>
+<li>
+<p>多服务运维难度随着服务的增加，运维的压力也在增大；</p>
+</li>
+<li>
+<p>系统部署依赖；</p>
+</li>
+<li>
+<p>服务间通信成本；</p>
+</li>
+<li>
+<p>数据一致性；</p>
+</li>
+<li>
+<p>系统集成测试；</p>
+</li>
+<li>
+<p>性能监控&hellip;&hellip;</p>
+</li>
+</ul>
+<h3 id="24微服务技术栈有哪些">2.4、微服务技术栈有哪些？</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">微服务条目</th>
+<th style="text-align:left">落地技术</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">服务开发</td>
+<td style="text-align:left">SpringBoot、Spring、SpringMVC</td>
+</tr>
+<tr>
+<td style="text-align:left">服务配置与管理</td>
+<td style="text-align:left">Netflix公司的Archaius、阿里的Diamond等</td>
+</tr>
+<tr>
+<td style="text-align:left">服务注册与发现</td>
+<td style="text-align:left">Eureka、Consul、Zookeeper等</td>
+</tr>
+<tr>
+<td style="text-align:left">服务调用</td>
+<td style="text-align:left">Rest、RPC、gRPC</td>
+</tr>
+<tr>
+<td style="text-align:left">服务熔断器</td>
+<td style="text-align:left">Hystrix、Envoy等</td>
+</tr>
+<tr>
+<td style="text-align:left">负载均衡</td>
+<td style="text-align:left">Ribbon、Nginx等</td>
+</tr>
+<tr>
+<td style="text-align:left">服务接口调用（客户端调用服务的简化工具）</td>
+<td style="text-align:left">Feign等</td>
+</tr>
+<tr>
+<td style="text-align:left">消息队列</td>
+<td style="text-align:left">Kafka、RabbitMQ、ActiveMQ等</td>
+</tr>
+<tr>
+<td style="text-align:left">服务配置中心管理</td>
+<td style="text-align:left">SpringCloudConfig、Chef等</td>
+</tr>
+<tr>
+<td style="text-align:left">服务路由（API网关）</td>
+<td style="text-align:left">Zuul等</td>
+</tr>
+<tr>
+<td style="text-align:left">服务监控</td>
+<td style="text-align:left">Zabbix、Nagios、Metrics、Specatator等</td>
+</tr>
+<tr>
+<td style="text-align:left">全链路追踪</td>
+<td style="text-align:left">Zipkin、Brave、Dapper等</td>
+</tr>
+<tr>
+<td style="text-align:left">服务部署</td>
+<td style="text-align:left">Docker、OpenStack、KuberNetes等</td>
+</tr>
+<tr>
+<td style="text-align:left">数据流操作开发包</td>
+<td style="text-align:left">SpringCloud Stream（封装与Redis、Rabbit、Kafka等发送接收消息）</td>
+</tr>
+<tr>
+<td style="text-align:left">事件消息总线</td>
+<td style="text-align:left">SpringCloud Bus</td>
+</tr>
+</tbody>
+</table>
+<h3 id="25为什么选择springcloud作为微服务架构">2.5、为什么选择SpringCloud作为微服务架构</h3>
+<p><strong>1、选型依据：</strong></p>
+<ul>
+<li>
+<p>整体解决方案和框架成熟度</p>
+</li>
+<li>
+<p>社区热度</p>
+</li>
+<li>
+<p>可维护性</p>
+</li>
+<li>
+<p>学习曲线</p>
+</li>
+</ul>
+<p><strong>2、当前各大IT公司用的微服务架构有哪些？</strong></p>
+<ul>
+<li>
+<p>阿里：dubbo+HFS</p>
+</li>
+<li>
+<p>京东：JSF</p>
+</li>
+<li>
+<p>新浪：Motan</p>
+</li>
+<li>
+<p>当当网：DubboX</p>
+</li>
+<li>
+<p>&hellip;&hellip;</p>
+</li>
+</ul>
+<p><strong>3、各微服务框架对比：</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">功能点/服务框架</th>
+<th style="text-align:left">Netflix/SpringClound</th>
+<th style="text-align:left">Motan</th>
+<th style="text-align:left">gRPC</th>
+<th style="text-align:left">Thrift</th>
+<th style="text-align:left">Dubbo/DubboX</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">功能定位</td>
+<td style="text-align:left">完整的微服务框架</td>
+<td style="text-align:left">RPC框架，但整合了zookeeper或Consul，实现集群环境的基本服务注册/发现</td>
+<td style="text-align:left">RPC框架</td>
+<td style="text-align:left">RPC框架</td>
+<td style="text-align:left">服务框架</td>
+</tr>
+<tr>
+<td style="text-align:left">支持Rest</td>
+<td style="text-align:left">是，Ribbon支持多种可插拔的序列化选择</td>
+<td style="text-align:left">否</td>
+<td style="text-align:left">否</td>
+<td style="text-align:left">否</td>
+<td style="text-align:left">否</td>
+</tr>
+<tr>
+<td style="text-align:left">支持RPC</td>
+<td style="text-align:left">否</td>
+<td style="text-align:left">是（Hession2）</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">是</td>
+</tr>
+<tr>
+<td style="text-align:left">支持多语言</td>
+<td style="text-align:left">是（Rest形式）</td>
+<td style="text-align:left">否</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">否</td>
+</tr>
+<tr>
+<td style="text-align:left">负载均衡</td>
+<td style="text-align:left">是（服务端zuul+客户端Ribbon），zuul-服务，动态路由，云顿负载均衡Eureka（针对中间层服务器）</td>
+<td style="text-align:left">是（客户端）</td>
+<td style="text-align:left">否</td>
+<td style="text-align:left">否</td>
+<td style="text-align:left">是（客户端）</td>
+</tr>
+<tr>
+<td style="text-align:left">配置服务</td>
+<td style="text-align:left">Netfix Archalus，Spring Cloud Config Server集中配置</td>
+<td style="text-align:left">是（zookeeper提供）</td>
+<td style="text-align:left">否</td>
+<td style="text-align:left">否</td>
+<td style="text-align:left">否</td>
+</tr>
+<tr>
+<td style="text-align:left">服务调用链监控</td>
+<td style="text-align:left">是（zuul），zuul提供边缘服务，API网关</td>
+<td style="text-align:left">否</td>
+<td style="text-align:left">否</td>
+<td style="text-align:left">否</td>
+<td style="text-align:left">否</td>
+</tr>
+<tr>
+<td style="text-align:left">高可用/容错</td>
+<td style="text-align:left">是（服务端Hystrix+客户端Ribbon）</td>
+<td style="text-align:left">是（客户端）</td>
+<td style="text-align:left">否</td>
+<td style="text-align:left">否</td>
+<td style="text-align:left">是（客户端）</td>
+</tr>
+<tr>
+<td style="text-align:left">典型应用案例</td>
+<td style="text-align:left">Netflix</td>
+<td style="text-align:left">Sina</td>
+<td style="text-align:left">Google</td>
+<td style="text-align:left">Facebook</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left">社区活跃程度</td>
+<td style="text-align:left">高</td>
+<td style="text-align:left">一般</td>
+<td style="text-align:left">高</td>
+<td style="text-align:left">一般</td>
+<td style="text-align:left">2017年后重新开始维护，之前中断了5年</td>
+</tr>
+<tr>
+<td style="text-align:left">学习难度</td>
+<td style="text-align:left">中断</td>
+<td style="text-align:left">低</td>
+<td style="text-align:left">高</td>
+<td style="text-align:left">高</td>
+<td style="text-align:left">低</td>
+</tr>
+<tr>
+<td style="text-align:left">文档丰富</td>
+<td style="text-align:left">高</td>
+<td style="text-align:left">一般</td>
+<td style="text-align:left">一般</td>
+<td style="text-align:left">一般</td>
+<td style="text-align:left">高</td>
+</tr>
+<tr>
+<td style="text-align:left">其他</td>
+<td style="text-align:left">Spring Cloud Bus为我们的应用程序带来了更多管理端点</td>
+<td style="text-align:left">支持降级</td>
+<td style="text-align:left">Netflix内部在开发集成gRPC</td>
+<td style="text-align:left">IDL定义</td>
+<td style="text-align:left">实践的公司比较多</td>
+</tr>
+</tbody>
+</table>
+<h2 id="3springcloud入门概述">3、SpringCloud入门概述</h2>
+<h3 id="31springcloud是什么">3.1、SpringCloud是什么</h3>
+<p>Spring官网：<a href="https://spring.io/">https://spring.io/</a></p>
+<p><a href="https://imgtu.com/i/XEFQ6s"><img src="https://s1.ax1x.com/2022/05/26/XEFQ6s.png" alt="XEFQ6s.png"></a></p>
+<p>SpringCloud，基于SpringBoot提供了一套微服务解决方案，包括服务注册与发现，配置中心，全链路监控，服务网关，负载均衡，熔断器等组件，处理基于Netflix的开源组件做高度抽象封装之外，还有一些选型中立的开源组件。</p>
+<p>SpringCloud利用SpringBoot的开发便利性，巧妙地简化了分布式系统基础设施的开发，SpringCloud为开发人员提供了快速构建分布式系统的一些工具，<strong>包括配置管理、服务发现、断路器、路由、微代理、事件总线、全局锁、决策竞选、分布式会话等等</strong>，他们都可以用SpringBoot的开发风格做到一键启动和部署。</p>
+<p>SpringBoot并没有重复造轮子，它只是将目前各家公司开发的比较成熟，经得起实际考验的服务框架组合起来，通过SpringBoot风格进行再封装，屏蔽掉了复杂的配置和实现原理，<strong>最终给开发者留出了一套简单易懂，易部署和易维护的分布式系统开发工具包</strong>。</p>
+<p>SpringCloud是分布式微服务架构下的一站式解决方案，是各个微服务架构落地技术的集合体，俗称微服务全家桶。</p>
+<h3 id="32springcloud和springboot关系">3.2、SpringCloud和SpringBoot关系</h3>
+<ul>
+<li>
+<p>SpringBoot专注于快速方便的开发单个个体微服务；</p>
+</li>
+<li>
+<p>SpringCloud是关注全局的微服务协调整理治理框架，它将SpringBoot开发的一个个单体微服务整合并管理起来，为各个微服务之间提供：配置管理、服务发现、断路器、路由、微代理、事件总线、全局锁、决策竞选、分布式会话等等集成服务；</p>
+</li>
+<li>
+<p>SpringBoot可以离开SpringCloud独立使用，开发项目，但是SpringCloud离不开SpringBoot，属于依赖关系；</p>
+</li>
+<li>
+<p>SpringBoot专注于快速、方便的开发单个个体微服务，SpringCloud关注全局的服务治理框架；</p>
+</li>
+</ul>
+<h3 id="33dubbo和springcloud技术选型">3.3、Dubbo和SpringCloud技术选型</h3>
+<h4 id="1分布式服务治理dubbo">1、分布式+服务治理Dubbo</h4>
+<p>目前成熟的互联网架构：应用服务化拆分+消息中间件</p>
+<h4 id="2dubbo和springcloud对比">2、Dubbo和SpringCloud对比</h4>
+<p>可以看一下社区活跃度
+<a href="https://github.com/dubbo">https://github.com/dubbo</a>
+<a href="https://github.com/spring-cloud">https://github.com/spring-cloud</a>
+结果：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left"></th>
+<th style="text-align:left">Dubbo</th>
+<th style="text-align:left">Spring</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">服务注册中心</td>
+<td style="text-align:left">Zookeeper</td>
+<td style="text-align:left">Spring Cloud Netflix Eureka</td>
+</tr>
+<tr>
+<td style="text-align:left">服务调用方式</td>
+<td style="text-align:left">RPC</td>
+<td style="text-align:left">REST API</td>
+</tr>
+<tr>
+<td style="text-align:left">服务监控</td>
+<td style="text-align:left">Dubbo-monitor</td>
+<td style="text-align:left">Spring Boot Admin</td>
+</tr>
+<tr>
+<td style="text-align:left">断路器</td>
+<td style="text-align:left">不完善</td>
+<td style="text-align:left">Spring Cloud Netflix Hystrix</td>
+</tr>
+<tr>
+<td style="text-align:left">服务网关</td>
+<td style="text-align:left">无</td>
+<td style="text-align:left">Spring Cloud Netflix Zuul</td>
+</tr>
+<tr>
+<td style="text-align:left">分布式配置</td>
+<td style="text-align:left">无</td>
+<td style="text-align:left">Spring Cloud Config</td>
+</tr>
+<tr>
+<td style="text-align:left">服务跟踪</td>
+<td style="text-align:left">无</td>
+<td style="text-align:left">Spring Cloud Sleuth</td>
+</tr>
+<tr>
+<td style="text-align:left">消息总线</td>
+<td style="text-align:left">无</td>
+<td style="text-align:left">Spring Cloud Bus</td>
+</tr>
+<tr>
+<td style="text-align:left">数据流</td>
+<td style="text-align:left">无</td>
+<td style="text-align:left">Spring Cloud Stream</td>
+</tr>
+<tr>
+<td style="text-align:left">批量任务</td>
+<td style="text-align:left">无</td>
+<td style="text-align:left">Spring Cloud Task</td>
+</tr>
+</tbody>
+</table>
+<p><strong>最大区别：SpringCloud抛弃了Dubbo的RPC通信，采用的是基于HTTP的REST方式。</strong>
+严格来说，这两种方式各有优劣。虽然从一定程度上来说，后者牺牲了服务调用的性能，但也避免了上面提到的原生RPC带来的问题。而且REST相比RPC更为灵活，服务提供方和调用方的依赖只依靠一纸契约，不存在代码级别的强依赖，这在强调快速演化的微服务环境下，显得更加合适。</p>
+<p><strong>品牌机与组装机的区别</strong>
+很明显，SpringCloud的功能比Dubbo更加强大，涵盖面更广，而且作为Spring的拳头项目，它也能够与Spring Framework、Spring Boot、Spring Data、Spring Batch等其他Spring项目完美融合，这些对于微服务而言是至关重要的。使用Dubbo构建的微服务架构就像组装电脑，各环节我们的选择自由度很高，但是最终结果很有可能因为一条内存质量不行就点不亮了，总是让人不怎么放心，但是如果你是一名高手，那这些都不是问题；而Spring Cloud就像品牌机，在Spring Source的整合下，做了大量的兼容性测试，保证了机器拥有更高的稳定性，但是如果要在使用非原装组件外的东西，就需要对其基础有足够的了解。</p>
+<p><strong>社区支持与更新力度</strong>
+最为重要的是，Dubbo停止更新了5年左右，虽然2017.7重启了。对于技术发展的新需求，需要由开发者自行拓展升级（比如当当网的DubboX），这对于很多想要采用微服务架构的中心软件组织，显然是不太合适的，中小公司没有这么强大的技术能力去修改Dubbo源码+周边的一整套解决方案，并不是每一个公司都有阿里的大牛+真实的线上生产环境测试过。</p>
+<p><strong>总结：</strong>
+曾风靡国内的开源RPC服务架构Dubbo在重启维护后，令许多用户为之雀跃，但同时，也迎来了一些质疑的声音。互联网技术发展迅速，Dubbo是否还能跟上时代？Dubbo与Spring Cloud相比又有何优势和差异？是否会有相关举措保证Dubbo的后续更新频率？</p>
+<p>人物：Dubbo重启维护开发的刘军。主要负责人之一</p>
+<p>刘军，阿里巴巴中间件高级研发工程师，主导了Dubbo重启维护以后的几个发版计划，专注于高性能RPC框架和微服务相关领域。曾负责网易考拉RPC框架的研发及指导在内部使用，参与了服务治理平台、分布式跟踪系统、分布式一致性框架等从无到有的设计与开发过程。</p>
+<p><strong>解决的问题域不一样：Dubbo的定位是一款RPC框架，Spring Cloud的目标是微服务架构下的一站式解决方案。</strong></p>
+<h3 id="34springcloud能干什么">3.4、SpringCloud能干什么</h3>
+<ul>
+<li>
+<p>Distributed/versioned configuration（分布式/版本控制配置）</p>
+</li>
+<li>
+<p>Service registration and discovery（服务注册与发现）</p>
+</li>
+<li>
+<p>Routing（路由）</p>
+</li>
+<li>
+<p>Service-to-service calls（服务到服务的调用）</p>
+</li>
+<li>
+<p>Load balancing（负载均衡配置）</p>
+</li>
+<li>
+<p>Circuit Breakers（断路器）</p>
+</li>
+<li>
+<p>Distributed messaging（分布式消息管理）</p>
+</li>
+<li>
+<p>&hellip;&hellip;</p>
+</li>
+</ul>
+<h3 id="35springcloud在哪下">3.5、SpringCloud在哪下</h3>
+<p>官网：<a href="http://projects.spring.io/spring-cloud/">http://projects.spring.io/spring-cloud/</a></p>
+<p>Spring Cloud的版本号有点特别：
+Spring Cloud是一个有众多独立子项目组成的大型综合项目，每个子项目有不同的发行节奏，都维护着自己的发行版本号。Spring Cloud通过一个资源清单BOM（Bill of Materials）来管理每个版本的子项目清单。为避免与子项目的发布号混淆。所以没有采用版本号的方式，而是通过命名的方式。
+这些版本名称的命名方式采用了伦敦地铁站的名称，同时根据字母表的顺序来对应版本时间顺序。比如：最早的Release版本：Angel，第二个Release版本：Brixton，然后是Camden、Dalston、Edgware、Greewich、Hoxton，2020年以后按照“年份.0.x”（2020.0.x）的格式命名，目前最新的稳定版本是2021.0.3。</p>
+<p>参考书：</p>
+<ul>
+<li>
+<p><a href="https://springcloud.cc/spring-cloud-netflix.html">https://springcloud.cc/spring-cloud-netflix.html</a></p>
+</li>
+<li>
+<p>中文API文档：<a href="https://springcloud.cc/spring-cloud-dalston.html">https://springcloud.cc/spring-cloud-dalston.html</a></p>
+</li>
+<li>
+<p>SpringCloud中国社区：<a href="http://springcloud.cn/">http://springcloud.cn/</a></p>
+</li>
+<li>
+<p>SpringCloud中文网：<a href="https://springclo">https://springcloud.cc</a></p>
+</li>
+</ul>
+
+    </div>
+    <div class="post-footer">
+      
+    </div>
+  </article>
+
+    </main>
+  </body>
+</html>

@@ -4,6 +4,43 @@
     <title>Tags on 个人博客</title>
     <link>https://ynwugang.github.io/tags/</link>
     <description>Recent content in Tags on 个人博客</description>
-    <generator>Hugo -- gohugo.io</generator><atom:link href="https://ynwugang.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Tue, 24 May 2022 12:58:24 +0800</lastBuildDate><atom:link href="https://ynwugang.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>SpringCloud</title>
+      <link>https://ynwugang.github.io/tags/springcloud/</link>
+      <pubDate>Tue, 24 May 2022 12:58:24 +0800</pubDate>
+      
+      <guid>https://ynwugang.github.io/tags/springcloud/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>MySQL</title>
+      <link>https://ynwugang.github.io/tags/mysql/</link>
+      <pubDate>Fri, 13 May 2022 09:58:00 +0800</pubDate>
+      
+      <guid>https://ynwugang.github.io/tags/mysql/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Java基础</title>
+      <link>https://ynwugang.github.io/tags/java%E5%9F%BA%E7%A1%80/</link>
+      <pubDate>Mon, 09 May 2022 14:41:08 +0800</pubDate>
+      
+      <guid>https://ynwugang.github.io/tags/java%E5%9F%BA%E7%A1%80/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>面试</title>
+      <link>https://ynwugang.github.io/tags/%E9%9D%A2%E8%AF%95/</link>
+      <pubDate>Mon, 09 May 2022 14:41:08 +0800</pubDate>
+      
+      <guid>https://ynwugang.github.io/tags/%E9%9D%A2%E8%AF%95/</guid>
+      <description></description>
+    </item>
+    
   </channel>
 </rss>

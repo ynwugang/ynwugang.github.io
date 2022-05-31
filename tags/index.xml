@@ -5,7 +5,25 @@
     <link>https://ynwugang.github.io/tags/</link>
     <description>Recent content in Tags on 个人博客</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Tue, 24 May 2022 12:58:24 +0800</lastBuildDate><atom:link href="https://ynwugang.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 31 May 2022 21:51:00 +0800</lastBuildDate><atom:link href="https://ynwugang.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>linux</title>
+      <link>https://ynwugang.github.io/tags/linux/</link>
+      <pubDate>Tue, 31 May 2022 21:51:00 +0800</pubDate>
+      
+      <guid>https://ynwugang.github.io/tags/linux/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>redis</title>
+      <link>https://ynwugang.github.io/tags/redis/</link>
+      <pubDate>Tue, 31 May 2022 12:58:24 +0800</pubDate>
+      
+      <guid>https://ynwugang.github.io/tags/redis/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>SpringCloud</title>
       <link>https://ynwugang.github.io/tags/springcloud/</link>

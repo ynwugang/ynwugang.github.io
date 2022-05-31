@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="en-us">
+  <head>
+    <title>redis学习记录（一）——NoSQL概述 // 个人博客</title>
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <meta charset="utf-8" />
+    <meta name="generator" content="Hugo 0.98.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="John Doe" />
+    <meta name="description" content="" />
+    <link rel="stylesheet" href="https://ynwugang.github.io/css/main.min.88e7083eff65effb7485b6e6f38d10afbec25093a6fac42d734ce9024d3defbd.css" />
+
+    
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="redis学习记录（一）——NoSQL概述"/>
+<meta name="twitter:description" content="1、Nosql概述 1.1 为什么要用Nosql  单机MySQL的年代
+  90年代，一个基本的网站访问量一般不会太大，单个数据库完全足够！ 那时候，更多的是使用静态网页HTML， 服务器没有太大的压力！ 思考一下，这种情况下：整个网站的瓶颈是什么？
+* 数据量太大，一台机器放不下；* 数据的索引（MySQL：B&#43; tree），一台机器内存也放不下；* 访问量（读写混合），一台服务器承受不了；  Memcached（缓存）&#43; MySQL &#43; 垂直拆分（读写分离）
+ 网站80%的情况都是在读，每次都要去查询数据库的话会增加数据库的压力！所以说我们希望减轻数据的压力，我们可以使用缓存来保证效率！ 发展过程：优化数据结构和索引 ==&gt; 文件缓存（IO） ==&gt; Memcached（当时最热门的技术！） 
+ 分库分表 &#43; 水平拆分 &#43; MySQL集群
+ 技术和业务在发展的同时，对人的要求也越来越高！ 本质：数据库（读，写） 早些年MyISAM：表锁，十分影响效率！高并发下就会出现严重的锁问题 转战Innodb：行锁 慢慢的就开始使用分库分表来解决写的压力！MySQL在那个年代推出了表分区（并没有多少公司使用） MySQL的集群，很好满足了那个年代的所有需求！ 
+ 如今最近的年代
+ MySQL等关系型数据库已经不够用了！数据量很多，变化很快！ 有时候还用MySQL存储一些比较大的文件、图片等，导致数据库表变得很大，效率降低。如果有一种数据库来专门处理这种数据，MySQL压力就变得十分小（研究如何处理这些问题！）。
+ 目前一个基本的互联网项目
+ 
+ 为什么要用NoSQL？
+ 用户的个人信息、地理位置、用户日志等等数据爆发式增长！ 这时候我们就需要NoSQL数据库，NoSQL可以很好的处理以上的情况！
+1.2 什么是NoSQL  NoSQL
+ NoSQL（Not Only SQL）。 泛指非关系型数据库。随着web2.0互联网的诞生，传统的关系型数据库很难应付web2.0时代。尤其是超大规模的高并发的社区暴露出很多难以克服的问题。NoSQL在当今大数据环境下发展迅速。 Redis是发展最快的，而且是我们当下必须掌握的一门技术。"/>
+
+    <meta property="og:title" content="redis学习记录（一）——NoSQL概述" />
+<meta property="og:description" content="1、Nosql概述 1.1 为什么要用Nosql  单机MySQL的年代
+  90年代，一个基本的网站访问量一般不会太大，单个数据库完全足够！ 那时候，更多的是使用静态网页HTML， 服务器没有太大的压力！ 思考一下，这种情况下：整个网站的瓶颈是什么？
+* 数据量太大，一台机器放不下；* 数据的索引（MySQL：B&#43; tree），一台机器内存也放不下；* 访问量（读写混合），一台服务器承受不了；  Memcached（缓存）&#43; MySQL &#43; 垂直拆分（读写分离）
+ 网站80%的情况都是在读，每次都要去查询数据库的话会增加数据库的压力！所以说我们希望减轻数据的压力，我们可以使用缓存来保证效率！ 发展过程：优化数据结构和索引 ==&gt; 文件缓存（IO） ==&gt; Memcached（当时最热门的技术！） 
+ 分库分表 &#43; 水平拆分 &#43; MySQL集群
+ 技术和业务在发展的同时，对人的要求也越来越高！ 本质：数据库（读，写） 早些年MyISAM：表锁，十分影响效率！高并发下就会出现严重的锁问题 转战Innodb：行锁 慢慢的就开始使用分库分表来解决写的压力！MySQL在那个年代推出了表分区（并没有多少公司使用） MySQL的集群，很好满足了那个年代的所有需求！ 
+ 如今最近的年代
+ MySQL等关系型数据库已经不够用了！数据量很多，变化很快！ 有时候还用MySQL存储一些比较大的文件、图片等，导致数据库表变得很大，效率降低。如果有一种数据库来专门处理这种数据，MySQL压力就变得十分小（研究如何处理这些问题！）。
+ 目前一个基本的互联网项目
+ 
+ 为什么要用NoSQL？
+ 用户的个人信息、地理位置、用户日志等等数据爆发式增长！ 这时候我们就需要NoSQL数据库，NoSQL可以很好的处理以上的情况！
+1.2 什么是NoSQL  NoSQL
+ NoSQL（Not Only SQL）。 泛指非关系型数据库。随着web2.0互联网的诞生，传统的关系型数据库很难应付web2.0时代。尤其是超大规模的高并发的社区暴露出很多难以克服的问题。NoSQL在当今大数据环境下发展迅速。 Redis是发展最快的，而且是我们当下必须掌握的一门技术。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ynwugang.github.io/posts/redis/redis%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B8%80nosql%E6%A6%82%E8%BF%B0/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-05-31T12:58:24+08:00" />
+<meta property="article:modified_time" content="2022-05-31T12:58:24+08:00" />
+
+
+
+  </head>
+  <body>
+    <header class="app-header">
+      <a href="https://ynwugang.github.io/"><img class="app-header-avatar" src="/avatar.jpg" alt="John Doe" /></a>
+      <h1>个人博客</h1>
+      <nav class="app-header-menu">
+          <a class="app-header-menu-item" href="/">Home</a>
+             - 
+          
+          <a class="app-header-menu-item" href="/tags/">Tags</a>
+             - 
+          
+          <a class="app-header-menu-item" href="/about/">About</a>
+      </nav>
+      <p>个人学习使用</p>
+      <div class="app-header-social">
+        
+          <a href="https://github.com/gohugoio" target="_blank" rel="noreferrer noopener">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-github">
+  <title>Github</title>
+  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+</svg>
+          </a>
+        
+          <a href="https://twitter.com/gohugoio" target="_blank" rel="noreferrer noopener">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-twitter">
+  <title>Twitter</title>
+  <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path>
+</svg>
+          </a>
+        
+      </div>
+    </header>
+    <main class="app-container">
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class ="post-title">redis学习记录（一）——NoSQL概述</h1>
+      <div class="post-meta">
+        <div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-calendar">
+  <title>calendar</title>
+  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line>
+</svg>
+          May 31, 2022
+        </div>
+        <div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-clock">
+  <title>clock</title>
+  <circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>
+</svg>
+          1 min read
+        </div>
+        <div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tag">
+  <title>tag</title>
+  <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line>
+</svg>
+              <a class="tag" href="https://ynwugang.github.io/tags/redis/">redis</a>
+        </div>
+      </div>
+    </header>
+    <div class="post-content">
+      <h2 id="1nosql概述">1、Nosql概述</h2>
+<h3 id="11-为什么要用nosql">1.1 为什么要用Nosql</h3>
+<blockquote>
+<p>单机MySQL的年代</p>
+</blockquote>
+<p><a href="https://imgtu.com/i/X8tEo8"><img src="https://s1.ax1x.com/2022/05/31/X8tEo8.png" alt="X8tEo8.png"></a>
+90年代，一个基本的网站访问量一般不会太大，单个数据库完全足够！
+那时候，更多的是使用静态网页HTML， 服务器没有太大的压力！
+思考一下，这种情况下：整个网站的瓶颈是什么？</p>
+<pre><code>* 数据量太大，一台机器放不下；
+
+* 数据的索引（MySQL：B+ tree），一台机器内存也放不下；
+
+* 访问量（读写混合），一台服务器承受不了；
+</code></pre>
+<blockquote>
+<p>Memcached（缓存）+ MySQL + 垂直拆分（读写分离）</p>
+</blockquote>
+<p>网站80%的情况都是在读，每次都要去查询数据库的话会增加数据库的压力！所以说我们希望减轻数据的压力，我们可以使用缓存来保证效率！
+发展过程：<strong>优化数据结构和索引 ==&gt; 文件缓存（IO） ==&gt; Memcached</strong>（当时最热门的技术！）
+<a href="https://imgtu.com/i/X8dv2F"><img src="https://s1.ax1x.com/2022/05/31/X8dv2F.png" alt="X8dv2F.png"></a></p>
+<blockquote>
+<p>分库分表 + 水平拆分 + MySQL集群</p>
+</blockquote>
+<p>技术和业务在发展的同时，对人的要求也越来越高！
+<strong>本质：数据库（读，写）</strong>
+早些年MyISAM：表锁，十分影响效率！高并发下就会出现严重的锁问题
+转战Innodb：行锁
+慢慢的就开始使用分库分表来解决写的压力！MySQL在那个年代推出了表分区（并没有多少公司使用）
+MySQL的集群，很好满足了那个年代的所有需求！
+<a href="https://imgtu.com/i/X8rq9P"><img src="https://s1.ax1x.com/2022/05/31/X8rq9P.png" alt="X8rq9P.png"></a></p>
+<blockquote>
+<p>如今最近的年代</p>
+</blockquote>
+<p>MySQL等关系型数据库已经不够用了！数据量很多，变化很快！
+有时候还用MySQL存储一些比较大的文件、图片等，导致数据库表变得很大，效率降低。如果有一种数据库来专门处理这种数据，MySQL压力就变得十分小（研究如何处理这些问题！）。</p>
+<blockquote>
+<p>目前一个基本的互联网项目</p>
+</blockquote>
+<p><a href="https://imgtu.com/i/X8XF8x"><img src="https://s1.ax1x.com/2022/05/31/X8XF8x.png" alt="X8XF8x.png"></a></p>
+<blockquote>
+<p>为什么要用NoSQL？</p>
+</blockquote>
+<p>用户的个人信息、地理位置、用户日志等等数据爆发式增长！
+这时候我们就需要NoSQL数据库，NoSQL可以很好的处理以上的情况！</p>
+<h3 id="12-什么是nosql">1.2 什么是NoSQL</h3>
+<blockquote>
+<p>NoSQL</p>
+</blockquote>
+<p>NoSQL（Not Only SQL）。
+泛指非关系型数据库。随着web2.0互联网的诞生，传统的关系型数据库很难应付web2.0时代。尤其是超大规模的高并发的社区暴露出很多难以克服的问题。NoSQL在当今大数据环境下发展迅速。
+Redis是发展最快的，而且是我们当下必须掌握的一门技术。</p>
+<blockquote>
+<p>NoSQL特点</p>
+</blockquote>
+<ul>
+<li>
+<p>方便扩展（数据之间没有关系，很好扩展）；</p>
+</li>
+<li>
+<p>大数据量高性能（Redis 一秒写8万次，读取11万次，NoSQL的缓存记录级是一种细粒度的缓存，性能会比较高）；</p>
+</li>
+<li>
+<p>数据类型时多样型的！（不需要事先设计数据库，随取随用）；</p>
+</li>
+<li>
+<p>传统的RDBMS和NoSQL</p>
+<ul>
+<li>
+<p>传统的 RDBMS</p>
+<ol>
+<li>
+<p>结构化组织</p>
+</li>
+<li>
+<p>SQL</p>
+</li>
+<li>
+<p>数据和关系都存在单独的表中</p>
+</li>
+<li>
+<p>数据定义语言</p>
+</li>
+<li>
+<p>严格的一致性</p>
+</li>
+<li>
+<p>基础的事务</p>
+</li>
+<li>
+<p>&hellip;&hellip;</p>
+</li>
+</ol>
+</li>
+<li>
+<p>NoSQL</p>
+<ol>
+<li>
+<p>不仅仅是数据</p>
+</li>
+<li>
+<p>没有固定的查询语言</p>
+</li>
+<li>
+<p>键值对存储，列存储，文档存储，图形数据库（社交关系）</p>
+</li>
+<li>
+<p>最终一致性</p>
+</li>
+<li>
+<p>CAP定理和BASE（异地多活）</p>
+</li>
+<li>
+<p>高性能、高可用、高可扩</p>
+</li>
+<li>
+<p>&hellip;&hellip;</p>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>了解：3V+3高</p>
+</blockquote>
+<p>大数据时代的3V：主要是描述问题的；</p>
+<ol>
+<li>海量（Volume）</li>
+<li>多样（Variety）</li>
+<li>实时（Velocity）</li>
+</ol>
+<p>大数据时代的3高：主要是对程序的要求；</p>
+<ol>
+<li>高并发</li>
+<li>高可扩</li>
+<li>高性能</li>
+</ol>
+<p>真正在公司中的实践：NoSQL + RDBMS 一起使用才是最强的。</p>
+<h3 id="13nosql的四大分类">1.3、NoSQL的四大分类</h3>
+<p><strong>KV键值对：</strong></p>
+<ul>
+<li>
+<p>新浪：Redis</p>
+</li>
+<li>
+<p>美团：Redis + Tair</p>
+</li>
+<li>
+<p>阿里、百度：Redis + memcache</p>
+</li>
+</ul>
+<p><strong>文档型数据库（bson格式——和json一样）：</strong></p>
+<ul>
+<li>
+<p>MongoDB</p>
+<ul>
+<li>
+<p>MongoDB是一个基于分布式文件存储的数据库，c++编写，主要用来处理大量的文档；</p>
+</li>
+<li>
+<p>MongoDB是一个介于关系型数据库和非关系型数据库之间的产品。MongoDB是非关系型数据库中功能最丰富、最想关系型数据库的；</p>
+</li>
+</ul>
+</li>
+<li>
+<p>ConthDB</p>
+</li>
+</ul>
+<p><strong>列存储数据库：</strong></p>
+<ul>
+<li>
+<p>HBase</p>
+</li>
+<li>
+<p>分布式文件系统</p>
+</li>
+</ul>
+<p><strong>图关系型数据库：</strong>
+不是存储图形的，存的是关系。例如：朋友圈社交网络，广告推荐&hellip;&hellip;</p>
+<ul>
+<li>Neo4j、InfoGrid</li>
+</ul>
+<blockquote>
+<p>四类非关系型数据库的对比</p>
+</blockquote>
+<p><a href="https://imgtu.com/i/XGkJy9"><img src="https://s1.ax1x.com/2022/05/31/XGkJy9.png" alt="XGkJy9.png"></a></p>
+
+    </div>
+    <div class="post-footer">
+      
+    </div>
+  </article>
+
+    </main>
+  </body>
+</html>
